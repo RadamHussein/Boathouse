@@ -1,0 +1,985 @@
+{
+	"variables": [],
+	"info": {
+		"name": "Marina - Test",
+		"_postman_id": "9011a9ba-4d22-fbeb-d65a-a2041c9011c2",
+		"description": "",
+		"schema": "https://schema.getpostman.com/json/collection/v2.0.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Create a New Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Created Boat: Boat name is correct\"] = body.name == postman.getEnvironmentVariable(\"boatName\");",
+							"tests[\"Created Boat: Craft type is correct\"] = body.craft_type == postman.getEnvironmentVariable(\"craft_type\");",
+							"tests[\"Created Boat: Length is correct\"] = body.length == 40;",
+							"tests[\"Crated Boat: Boat is at sea\"] = body.at_sea === true;",
+							"",
+							"postman.setEnvironmentVariable(\"testBoat1\", body.self);",
+							"postman.setEnvironmentVariable(\"id_testBoat1\", body.id_num);",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/boat",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"{{boatName}}\",\n\t\"craft_type\":\"{{craft_type}}\",\n\t\"length\":40\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create An Empty Boat Entry",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Created Boat: Boat name is empty\"] = body.name === null;",
+							"tests[\"Created Boat: Craft type is empty\"] = body.craft_type === null;",
+							"tests[\"Created Boat: Length is empty\"] = body.length === null;",
+							"tests[\"Crated Boat: Boat is at sea\"] = body.at_sea === true;",
+							"",
+							"postman.setEnvironmentVariable(\"testBoat2\", body.self);",
+							"postman.setEnvironmentVariable(\"id_testBoat2\", body.id_num);",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/boat",
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Boats",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"var boatCount = 0;",
+							"",
+							"boat1_id = postman.getEnvironmentVariable(\"id_testBoat1\");",
+							"boat2_id = postman.getEnvironmentVariable(\"id_testBoat2\");",
+							"",
+							"//iterate through the results ",
+							"for(x = 0; x < body.length; x++){",
+							"    if (body[x].id_num == boat1_id || body[x].id_num == boat2_id){",
+							"        boatCount++;",
+							"    }",
+							"}",
+							"",
+							"tests['Request returned all boats'] = boatCount === 2;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/boat",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create a New Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Slip Created: Submitted number matches slip number\"] = body.number === 7;",
+							"tests[\"Slip Created: Slip is empty\"] = body.current_boat === null;",
+							"tests[\"Slip Created: Default arrival date is null\"] = body.arrival_date === null;",
+							"",
+							"postman.setEnvironmentVariable(\"testSlip\", body.self);",
+							"postman.setEnvironmentVariable(\"id_testSlip\", body.id_num);"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"number\":7\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Create A Second Test Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Slip Created: Submitted number matches slip number\"] = body.number === 10;",
+							"tests[\"Slip Created: Slip is empty\"] = body.current_boat === null;",
+							"tests[\"Slip Created: Default arrival date is null\"] = body.arrival_date === null;",
+							"",
+							"postman.setEnvironmentVariable(\"testSlip2\", body.self);",
+							"postman.setEnvironmentVariable(\"id_testSlip2\", body.id_num);"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"number\":10\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Test Duplicate Slip Error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 403\"] = responseCode.code === 403;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip",
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"number\":7\n}"
+				},
+				"description": "This test attempts to create a third slip using an already used slip number."
+			},
+			"response": []
+		},
+		{
+			"name": "Test Empty Slip Post Body Error",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip",
+				"method": "POST",
+				"header": [],
+				"body": {},
+				"description": "This tests a \"create slip\" request with an empty body."
+			},
+			"response": []
+		},
+		{
+			"name": "Get All Slips",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"var slipCount = 0;",
+							"",
+							"slip1_id = postman.getEnvironmentVariable(\"id_testSlip\");",
+							"slip2_id = postman.getEnvironmentVariable(\"id_testSlip2\");",
+							"",
+							"//iterate through the results and check the owner",
+							"for(x = 0; x < body.length; x++){",
+							"    if (body[x].id_num == slip1_id || body[x].id_num == slip2_id){",
+							"        slipCount++;",
+							"    }",
+							"}",
+							"",
+							"tests[\"Request returned all slips\"] = slipCount === 2;",
+							"",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Assign A Boat To A Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Boat added to slip: current_boat matches\"] = body[0].current_boat == postman.getEnvironmentVariable(\"testBoat1\");",
+							"tests[\"Boat added to slip: arrival_date matches\"] = body[0].arrival_date == \"07/10/2017\";",
+							"tests[\"Boat added to slip: boat at_sea = False\"] = body[1].at_sea === false;",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/boat/{{testSlip}}",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"boat\":\"{{testBoat1}}\",\n\t\"date\":\"07/10/2017\"\n}"
+				},
+				"description": "Assigns Test Boat 1 to Test Slip 1"
+			},
+			"response": []
+		},
+		{
+			"name": "View A Boat In A Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"View A Boat At A Slip: boat id matches\"] = body.id_num == postman.getEnvironmentVariable(\"id_testBoat1\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/boat/details/{{testSlip}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "Test Slip 1 should contain Test Boat 1"
+			},
+			"response": []
+		},
+		{
+			"name": "Test Adding Boat To Occupied Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 403\"] = responseCode.code === 403;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/boat/{{testSlip}}",
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"boat\":\"{{testBoat2}}\",\n\t\"date\":\"07/10/2017\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Test Adding Docked Boat To Empty Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 403\"] = responseCode.code === 403;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/boat/{{testSlip2}}",
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"boat\":\"{{testBoat1}}\",\n\t\"date\":\"07/10/2017\"\n}"
+				},
+				"description": "Trys to add Test Boat 1 to Test Slip 2 while Test Boat 1 is already docked at Test Slip 1."
+			},
+			"response": []
+		},
+		{
+			"name": "View a Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Request returned requested boat\"] = body.self == postman.getEnvironmentVariable(\"testBoat1\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/boat/{{testBoat1}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Modify Details For A Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Modify Boat Details: name matches request\"] = body.name == \"Jaws The Revenge\";",
+							"tests[\"Modify Boat Details: craft_type matches request\"] = body.craft_type == \"Fishing Boat\";",
+							"tests[\"Modify Boat Details: length matches request\"] = body.length === 35;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/boat/{{testBoat1}}",
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Jaws The Revenge\",\n\t\"type\":\"Fishing Boat\",\n\t\"length\":35\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Test Modify Boat Length With A Non-Integer Value",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 403\"] = responseCode.code === 403;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/boat/{{testBoat1}}",
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"name\":\"Jaws The Revenge\",\n\t\"type\":\"Fishing Boat\",\n\t\"length\":\"35\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Modify A Slip Number: User Provided Number",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Modify Slip Number: slip number matches request\"] = body.number === 5;",
+							"",
+							"postman.setEnvironmentVariable(\"slipNumber\", 5);"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/{{testSlip}}",
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"number\":5\n}"
+				},
+				"description": "Tests modification with a user supplied number."
+			},
+			"response": []
+		},
+		{
+			"name": "Test Modify Slip With Invalid Number",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 403\"] = responseCode.code === 403;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/{{testSlip}}",
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"number\":5\n}"
+				},
+				"description": "This runs the same request as the previous with the exact same body."
+			},
+			"response": []
+		},
+		{
+			"name": "Modify A Slip Number: API Generated Number",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Modify Slip Number: API generated slip number\"] = body.number != postman.getEnvironmentVariable(\"slipNumber\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/{{testSlip}}",
+				"method": "PATCH",
+				"header": [],
+				"body": {},
+				"description": "Tests a modification request that does not contain a body supplied by the user."
+			},
+			"response": []
+		},
+		{
+			"name": "View A Single Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Request returned requested slip\"] = body.self == postman.getEnvironmentVariable(\"testSlip\");"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/{{testSlip}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Replace a Boat In A Slip With A New Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Replace a boat in a slip: slip contains new boat\"] = body[0].current_boat == postman.getEnvironmentVariable(\"testBoat2\");",
+							"tests[\"Replace a boat in a slip: slip has new arrival date\"] = body[0].arrival_date == \"07/12/2017\";",
+							"tests[\"Replace a boat in a slip: new boat set to at_sea = False\"] = body[1].at_sea === false;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/{{testSlip}}",
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"boat\":\"{{testBoat2}}\",\n\t\"date\":\"07/12/2017\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Verify testBoat1 is now at Sea",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Request returned requested boat\"] = body.at_sea === true;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/boat/{{testBoat1}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": "This checks that the boat that was just replaced in testSlip1 is now at sea."
+			},
+			"response": []
+		},
+		{
+			"name": "Test Replace Request On An Empty Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 403\"] = responseCode.code === 403;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/{{testSlip2}}",
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"boat\":\"{{testBoat1}}\",\n\t\"date\":\"07/12/2017\"\n}"
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Remove Boat From Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Boat removed from slip: current_boat is null\"] = body[0].current_boat === null;",
+							"tests[\"Boat removed from slip: arrival_date is null\"] = body[0].arrival_date === null;",
+							"tests[\"Boat added to slip: boat at_sea = True\"] = body[1].at_sea === true;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/boat/{{testSlip}}",
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Test Remove Request On Empty Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 400\"] = responseCode.code === 400;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/boat/{{testSlip}}",
+				"method": "PATCH",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Assign A Boat To A Slip copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Boat added to slip: current_boat matches\"] = body[0].current_boat == postman.getEnvironmentVariable(\"testBoat1\");",
+							"tests[\"Boat added to slip: arrival_date matches\"] = body[0].arrival_date == \"07/10/2017\";",
+							"tests[\"Boat added to slip: boat at_sea = False\"] = body[1].at_sea === false;",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/boat/{{testSlip}}",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"boat\":\"{{testBoat1}}\",\n\t\"date\":\"07/10/2017\"\n}"
+				},
+				"description": "Assigns Test Boat 1 to Test Slip 1"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete A Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/boat/{{testBoat1}}",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Verify Deleted Boat",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"var boatCount = false;",
+							"",
+							"boat1_id = postman.getEnvironmentVariable(\"id_testBoat1\");",
+							"",
+							"//iterate through the results ",
+							"for(x = 0; x < body.length; x++){",
+							"    if (body[x].id_num == boat1_id){",
+							"        boatCount = true;",
+							"    }",
+							"}",
+							"",
+							"tests['Confirm boat deleted'] = boatCount === false;",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/boat",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Assign A Boat To A Slip copy copy",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Boat added to slip: current_boat matches\"] = body[0].current_boat == postman.getEnvironmentVariable(\"testBoat2\");",
+							"tests[\"Boat added to slip: arrival_date matches\"] = body[0].arrival_date == \"07/10/2017\";",
+							"tests[\"Boat added to slip: boat at_sea = False\"] = body[1].at_sea === false;",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/boat/{{testSlip}}",
+				"method": "PATCH",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/x-www-form-urlencoded",
+						"description": ""
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n\t\"boat\":\"{{testBoat2}}\",\n\t\"date\":\"07/10/2017\"\n}"
+				},
+				"description": "Assigns Test Boat 2 to Test Slip 1"
+			},
+			"response": []
+		},
+		{
+			"name": "Delete A Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/{{testSlip}}",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": "Deletes Test Slip 1"
+			},
+			"response": []
+		},
+		{
+			"name": "Verify Deleted Slip",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"var slipCount = false;",
+							"",
+							"slip1_id = postman.getEnvironmentVariable(\"id_testSlip\");",
+							"",
+							"//iterate through the results and check the owner",
+							"for(x = 0; x < body.length; x++){",
+							"    if (body[x].id_num == slip1_id){",
+							"        slipCount = true;",
+							"    }",
+							"}",
+							"",
+							"tests[\"Verified slip delete request\"] = slipCount === false;",
+							"",
+							"",
+							""
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Verify Boat Is At Sea After Slip Delete Request",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;",
+							"",
+							"var body = JSON.parse(responseBody);",
+							"",
+							"tests[\"Request boat verified at sea\"] = body.at_sea === true;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/boat/{{testBoat2}}",
+				"method": "GET",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Test Boat 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/boat/{{testBoat2}}",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Test Slip 2",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							"tests[\"Status code is 200\"] = responseCode.code === 200;"
+						]
+					}
+				}
+			],
+			"request": {
+				"url": "https://fine-loader-172219.appspot.com/slip/{{testSlip2}}",
+				"method": "DELETE",
+				"header": [],
+				"body": {},
+				"description": ""
+			},
+			"response": []
+		}
+	]
+}
